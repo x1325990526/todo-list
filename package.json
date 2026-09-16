@@ -1,5 +1,5 @@
 {
-  "name": "restaurant-page-",
+  "name": "todo-list",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,16 +11,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/x1325990526/restaurant-page-.git"
+    "url": "git+https://github.com/x1325990526/todo-list.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/x1325990526/restaurant-page-/issues"
+    "url": "https://github.com/x1325990526/todo-list/issues"
   },
-  "homepage": "https://x1325990526.github.io/restaurant-page-/",
+  "homepage": "https://x1325990526.github.io/todo-list/",
   "devDependencies": {
     "css-loader": "^7.1.5",
     "gh-pages": "^6.3.0",
