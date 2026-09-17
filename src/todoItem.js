@@ -1,20 +1,22 @@
 export default class TodoItem {
     constructor({
+        id = crypto.randomUUID(),
         title,
         description = "",
         dueDate = null,        // "YYYY-MM-DD" 字符串，不是 Date 对象
         priority = "medium",   // "low" | "medium" | "high"
         notes = "",
         completed = false,
+        createdAt = new Date().toISOString(),
     } = {}){
-        this.id = crypto.randomUUID();
+        this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.notes = notes;
         this.completed = completed;
-        this.createdAt = new Date().toISOString();
+        this.createdAt = createdAt;
     }
 
     toggle(){

@@ -31,12 +31,12 @@ export class Project {
         return todo;
     }
     
-    sorted(){
+    sortTodo(){
         return this.todos.sort(
             (a, b) => 
                 a.completed - b.completed ||
                 PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority] ||
-                a.dueDate.localeCompare(b.dueDate)
+                (a.dueDate ?? "9999-12-31").localeCompare(b.dueDate ?? "9999-12-31")
         );
     }
 }
