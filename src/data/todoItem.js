@@ -28,4 +28,17 @@ export default class TodoItem {
         return new Date(`${this.dueDate}T00:00:00`) < new Date(today.toDateString());
     }
 
+    toJSON() {
+        return{
+            id: this.id,
+            title: this.title,
+            description: this.description,
+            dueDate: this.dueDate,
+            priority: this.priority,
+            notes: this.notes,
+            completed: this.completed,
+            createdAt: this.createdAt,
+        };
+    }
+
 }

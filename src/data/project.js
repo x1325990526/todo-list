@@ -39,4 +39,19 @@ export class Project {
                 (a.dueDate ?? "9999-12-31").localeCompare(b.dueDate ?? "9999-12-31")
         );
     }
+
+    toJSON() {
+        return { 
+            id: this.id, 
+            name: this.name, 
+            todos: this.todos 
+        };
+    }
+
+    static fromJSON({id, name, todos = [] }){
+        const project = new Project(name);
+        if(id) project.id = id;
+        project.todos = todos.map((t) => new TodoItem(t));
+        return project;
+    }
 }
