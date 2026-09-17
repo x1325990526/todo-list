@@ -2,7 +2,7 @@
 import TodoItem from "./todoItem";
 
 
-
+const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
 export class Project {
 
     constructor(name = "Inbox"){
@@ -31,4 +31,12 @@ export class Project {
         return todo;
     }
     
+    sorted(){
+        return this.todos.sort(
+            (a, b) => 
+                a.completed - b.completed ||
+                PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority] ||
+                a.dueDate.localeCompare(b.dueDate)
+        );
+    }
 }
