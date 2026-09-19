@@ -1,4 +1,4 @@
-import Project from "./project";
+import Project from "./project.js";
 
 const KEY = "todo-list";
 const VERSION = 1;

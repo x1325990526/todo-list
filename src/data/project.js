@@ -1,5 +1,5 @@
 
-import TodoItem from "./todoItem";
+import TodoItem from "./todoItem.js";
 
 
 const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
