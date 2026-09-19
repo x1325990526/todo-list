@@ -3,7 +3,7 @@ import TodoItem from "./todoItem";
 
 
 const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
-export class Project {
+export default class Project {
 
     constructor(name = "Inbox"){
         this.id = crypto.randomUUID();
