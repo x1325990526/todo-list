@@ -1,6 +1,31 @@
 import "./styles.css";
-import { init, setCommitHandler}  from "./data/state.js";
-import { save, load } from "./data/storage.js";
+import {
+    setCommitHandler,
+    init,
+    getProjects,
+    getActiveProject,
+    addProject,
+    removeProject,
+    setActiveProject,
+    addTodo,
+    removeTodo,
+    updateTodo,
+} from "./data/state.js";
+import { save, load, clear } from "./data/storage.js";
 
 setCommitHandler(save);
 init(load());
+
+Object.assign(window, {
+    getProjects,
+    getActiveProject,
+    addProject,
+    removeProject,
+    setActiveProject,
+    addTodo,
+    removeTodo,
+    updateTodo,
+    clear,
+});
+
+console.log(getProjects());
