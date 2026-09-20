@@ -51,6 +51,20 @@ export function addProject(name){
     
 }
 
+export function removeProject(id) {
+    return mutate(() => {
+        const index = state.projects.findIndex((p) => p.id === id);
+        if (index === -1) return null;
+
+        const [removed] = state.projects.splice(index, 1);
+        if (state.activeProjectId === id) {
+            state.activeProjectId =
+                state.projects[Math.min(index, state.projects.length - 1)]?.id ?? null;
+        }
+        return removed;
+    });
+}
+
 export function setActiveProject(id) {
     mutate(() => { state.activeProjectId = id; });
 }
