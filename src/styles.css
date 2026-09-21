@@ -1,1 +1,643 @@
- 
+/* ==========================================================================
+   Todo 样式表
+   目录：
+     1. 设计变量   2. 基础重置   3. 通用组件   4. 整体布局
+     5. 侧栏       6. 主区       7. 任务列表   8. 详情抽屉   9. 响应式
+   命名规范：块 .block / 元素 .block__element / 状态 .is-xxx / 变体 .block--xxx
+   ========================================================================== */
+
+/* ------------------------------- 1. 设计变量 ------------------------------- */
+:root {
+    /* 颜色 */
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --surface-2: #f1f3f5;
+    --border: #e3e6ea;
+    --border-strong: #ccd2da;
+    --text: #1f2328;
+    --text-muted: #6b7280;
+    --accent: #3b6ef6;
+    --accent-hover: #2f5fe0;
+    --danger: #e5484d;
+    --warning: #b06f00;
+    --success: #1f7a52;
+
+    /* 尺寸 */
+    --sidebar-w: 264px;
+    --detail-w: 380px;
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-pill: 999px;
+
+    /* 其它 */
+    --shadow-sm: 0 1px 2px rgb(16 24 40 / 6%);
+    --shadow-md: 0 8px 24px rgb(16 24 40 / 12%);
+    --transition: 0.2s ease;
+    --font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+        "Microsoft YaHei", "Noto Sans SC", sans-serif;
+
+    color-scheme: light;
+}
+
+/* 跟随系统深色模式：只换颜色变量，布局不变 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #16181d;
+        --surface: #1e2126;
+        --surface-2: #262a31;
+        --border: #333841;
+        --border-strong: #454b56;
+        --text: #e7e9ee;
+        --text-muted: #9aa3b0;
+        --accent: #5b8bff;
+        --accent-hover: #7aa2ff;
+        --danger: #ff6b6f;
+        --warning: #f0b429;
+        --success: #4cc38a;
+        --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+        --shadow-md: 0 8px 24px rgb(0 0 0 / 45%);
+
+        color-scheme: dark;
+    }
+}
+
+/* ------------------------------- 2. 基础重置 ------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font: 15px/1.6 var(--font);
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ------------------------------- 3. 通用组件 ------------------------------- */
+/* 按钮 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background var(--transition), border-color var(--transition),
+        color var(--transition);
+}
+
+.btn--primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn--primary:hover:not(:disabled) {
+    background: var(--accent-hover);
+}
+
+.btn--ghost {
+    border-color: var(--border);
+    background: var(--surface);
+}
+
+.btn--ghost:hover:not(:disabled) {
+    background: var(--surface-2);
+}
+
+.btn--danger {
+    color: var(--danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 图标按钮（删除 / 关闭） */
+.icon-btn {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    opacity: 0.7;
+    transition: background var(--transition), color var(--transition),
+        opacity var(--transition);
+}
+
+.icon-btn:hover {
+    background: var(--surface-2);
+    color: var(--text);
+    opacity: 1;
+}
+
+.project__remove:hover,
+.todo__remove:hover {
+    color: var(--danger);
+}
+
+/* SVG 图标 */
+.icon {
+    flex: none;
+    width: 18px;
+    height: 18px;
+}
+
+.icon-btn .icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* 优先级标签 */
+.tag {
+    padding: 0 8px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    line-height: 20px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+}
+
+.tag--high {
+    background: color-mix(in srgb, var(--danger) 14%, transparent);
+    color: var(--danger);
+}
+
+.tag--medium {
+    background: color-mix(in srgb, var(--warning) 16%, transparent);
+    color: var(--warning);
+}
+
+.tag--low {
+    background: color-mix(in srgb, var(--success) 14%, transparent);
+    color: var(--success);
+}
+
+/* 表单字段 */
+.field {
+    display: block;
+    margin-bottom: 14px;
+}
+
+.field__label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.field__input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.field__input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+textarea.field__input {
+    min-height: 64px;
+    resize: vertical;
+}
+
+.field-row {
+    display: flex;
+    gap: 12px;
+}
+
+.field-row .field {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 空状态 / 提示文字 */
+.empty {
+    padding: 64px 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.hint {
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ------------------------------- 4. 整体布局 ------------------------------- */
+/* 三栏：侧栏 | 主区 | 详情抽屉（收起时宽度为 0） */
+.container {
+    display: flex;
+    height: 100vh;
+    height: 100dvh;
+}
+
+/* --------------------------------- 5. 侧栏 --------------------------------- */
+.sidebar {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 16px;
+    width: var(--sidebar-w);
+    padding: 20px 14px;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.sidebar__brand {
+    padding-left: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.sidebar__list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+}
+
+.sidebar__add {
+    width: 100%;
+    border-style: dashed;
+}
+
+/* 项目条目 */
+.project {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border-radius: var(--radius);
+    transition: background var(--transition), color var(--transition);
+}
+
+.project:hover {
+    background: var(--surface-2);
+}
+
+.project.is-active {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.project__open {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    text-align: left;
+    color: inherit;
+    border-radius: inherit;
+}
+
+.project__name {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* --------------------------------- 6. 主区 --------------------------------- */
+.main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.main__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.main__heading {
+    min-width: 0;
+}
+
+.main__title {
+    font-size: 20px;
+    line-height: 1.3;
+}
+
+.main__sub {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.main__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 28px 48px;
+}
+
+/* ------------------------------- 7. 任务列表 ------------------------------- */
+.group + .group {
+    margin-top: 24px;
+}
+
+.group__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-left: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.group[data-group="overdue"] .group__label {
+    color: var(--danger);
+}
+
+.group__count {
+    padding: 0 7px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+}
+
+.todos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* 单条任务 */
+.todo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition), opacity var(--transition);
+}
+
+.todo:hover {
+    border-color: var(--border-strong);
+}
+
+.todo.is-done {
+    opacity: 0.65;
+}
+
+.todo__check {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.todo__open {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    text-align: left;
+}
+
+.todo__title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.todo.is-done .todo__title {
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.todo__meta {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.todo__date.is-overdue {
+    color: var(--danger);
+    font-weight: 500;
+}
+
+/* ------------------------------- 8. 详情抽屉 ------------------------------- */
+/* 默认宽度 0，加上 [data-open] 时滑出；内容宽度固定，动画时不会重排 */
+.detail {
+    flex: none;
+    width: 0;
+    overflow: hidden;
+    background: var(--surface);
+    transition: width var(--transition);
+}
+
+.detail[data-open] {
+    width: min(var(--detail-w), 100%);
+    box-shadow: var(--shadow-md);
+}
+
+.detail__form {
+    display: flex;
+    flex-direction: column;
+    width: var(--detail-w);
+    max-width: 100vw;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    border-left: 1px solid var(--border);
+}
+
+.detail__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.detail__title {
+    font-size: 17px;
+}
+
+.detail__footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.detail__spacer {
+    flex: 1;
+}
+
+/* -------------------------------- 9. 响应式 -------------------------------- */
+@media (max-width: 1100px) {
+    :root {
+        --detail-w: 340px;
+    }
+}
+
+/* 窄屏：详情改为浮动抽屉，盖在主区之上 */
+@media (max-width: 900px) {
+    :root {
+        --sidebar-w: 200px;
+    }
+
+    .main__header,
+    .main__body {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .detail {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+    }
+
+    .detail__form {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* 手机：侧栏变成顶部横条，把宽度全部留给任务列表 */
+@media (max-width: 640px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 10px 12px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar__brand {
+        padding: 0 2px;
+        font-size: 17px;
+    }
+
+    .sidebar__list {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .project {
+        flex: none;
+    }
+
+    .project__open {
+        padding: 6px 10px;
+    }
+
+    .project__name {
+        max-width: 96px;
+    }
+
+    .sidebar__add {
+        width: auto;
+        flex: none;
+    }
+
+    .main__header,
+    .main__body {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+
+    .main__header {
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .main__body {
+        padding-bottom: 32px;
+    }
+
+    .todo__meta .tag {
+        display: none; /* 空间不足时隐藏优先级标签，详情里仍可查看 */
+    }
+}
