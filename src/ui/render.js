@@ -167,7 +167,7 @@ function compareTodos(a, b) {
 function renderDetail(active) {
     const panel = $('[data-mount="detail"]');
     const isNew = view.detailId === "new";
-    const todo = !isNew && active ? active.getTodo(view.detailId) ?? null : null;
+    const todo = (!isNew && active) ? (active.getTodo(view.detailId) ?? null) : null;
 
     if (!isNew && !todo) {
         lastDetailKey = null;
